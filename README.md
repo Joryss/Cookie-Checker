@@ -13,7 +13,7 @@ A script syntax checker for the scripts of [Cookie Touch](https://github.com/coo
 
 # Current View
 
-![Image of Cookie Checker](./images/current 1.png)
+![Image of Cookie Checker](images/current 1.png)
 
 # Credits
 
