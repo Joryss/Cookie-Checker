@@ -5,59 +5,31 @@ module.exports = {
         console.log(`${JSON.stringify(configProperty)}`.cyan);
         switch (configProperty.key.name){
             case "MAX_PODS":
-                if (isNumeric(configProperty.value.raw)){
-                    console.log(`${configProperty.key.name} is indeed an integer`.green);
-                } else {
-                    console.log(`${configProperty.key.name} is not an integer`.red);
-                }
+                isInteger(configProperty);
                 break;
             case "MIN_MONSTERS":
-                if (isNumeric(configProperty.value.raw)){
-                    console.log(`${configProperty.key.name} is indeed an integer`.green);
-                } else {
-                    console.log(`${configProperty.key.name} is not an integer`.red);
-                }
+                isInteger(configProperty);
                 break;
             case "MAX_MONSTERS":
-                if (isNumeric(configProperty.value.raw)){
-                    console.log(`${configProperty.key.name} is indeed an integer`.green);
-                } else {
-                    console.log(`${configProperty.key.name} is not an integer`.red);
-                }
+                isInteger(configProperty);
+                break;
             case "MIN_MONSTERS_LEVEL":
-                if (isNumeric(configProperty.value.raw)){
-                    console.log(`${configProperty.key.name} is indeed an integer`.green);
-                } else {
-                    console.log(`${configProperty.key.name} is not an integer`.red);
-                }
+                isInteger(configProperty);
+                break;
             case "MAX_MONSTERS_LEVEL":
-                if (isNumeric(configProperty.value.raw)){
-                    console.log(`${configProperty.key.name} is indeed an integer`.green);
-                } else {
-                    console.log(`${configProperty.key.name} is not an integer`.red);
-                }
+                isInteger(configProperty);
+                break;
             case "FORBIDDEN_MONSTERS":
-                if (configProperty.value.type == "ArrayExpression") {
-                    console.log(`${configProperty.key.name} is indeed an array`.green);
-                    for (var i = 0; i < configProperty.value.elements.length; i++) {
-                        if (isNumeric(configProperty.value.elements[i].raw)){
-                            console.log(`${configProperty.value.elements[i].raw} is indeed an integer`.green);
-                        } else {
-                            console.log(`${configProperty.value.elements[i].raw} is not an integer`.red);
-                        }
-                    }
-
-                }else{
-                    console.log(`${configProperty.key.name} is not an array`.red);
-                }
+                isArrayOfInteger(configProperty);
+                break;
             case "MANDATORY_MONSTERS":
-                //do something
+                isArrayOfInteger(configProperty);
                 break;
             case "MAX_FIGHTS_PER_MAP":
-                //do something
+                isInteger(configProperty);
                 break;
             case "ELEMENTS_TO_GATHER":
-                //do something
+                isArrayOfInteger(configProperty);
                 break;
             case "BANK_PUT_ITEMS":
                 //do something
@@ -66,35 +38,85 @@ module.exports = {
                 //do something
                 break;
             case "BANK_PUT_KAMAS":
-                //do something
+                isInteger(configProperty);
                 break;
             case "BANK_GET_KAMAS":
-                //do something
+                isInteger(configProperty);
                 break;
             case "AUTO_REGEN":
-                //do something
+                if (configProperty.value.type == "ObjectExpression") {
+                    for (var i = 0; i < configProperty.value.properties.length; i++) {
+                        console.log(configProperty.value.properties[i].key.name);
+                    }
+                }
+                //console.log(JSON.stringify(configProperty));
                 break;
             case "AUTO_DELETE":
-                //do something
+                isArrayOfInteger(configProperty);
                 break;
             case "OPEN_BAGS":
-                //do something
-                if (configProperty.value.raw == "true"){
-                    console.log(`${configProperty.key.name} is indeed a boolean`.green);
-                } else {
-                    console.log(`${configProperty.key.name} is not a boolean`.red);
-                }
+                isBoolean(configProperty);
                 break;
             case "DISPLAY_GATHER_COUNT":
-                //do something
+                isBoolean(configProperty);
                 break;
             case "DISPLAY_FIGHT_COUNT":
-                //do something
+                isBoolean(configProperty);
                 break;
             default:
                 console.log(`${configProperty.key.name} is not a valid config identifier`.red);
 
         }
+    }
+}
+
+function isInteger(configProperty, fromArray = false) {
+    if (fromArray){
+        if (isNumeric(configProperty.raw)){
+            console.log(`${configProperty.raw} is indeed an integer`.green);
+            return true;
+        } else {
+            console.log(`${configProperty.raw} is not an integer`.red);
+            return false;
+        }
+    } else {
+        if (isNumeric(configProperty.value.raw)){
+            console.log(`${configProperty.key.name} is indeed an integer`.green);
+            return true;
+        } else {
+            console.log(`${configProperty.key.name} is not an integer`.red);
+            return false;
+        }
+    }
+}
+function isArrayOfInteger(configProperty) {
+    if (configProperty.value.type == "ArrayExpression") {
+        const validIntegers = [];
+        for (let i = 0; i < configProperty.value.elements.length; i++) {
+            if (isInteger(configProperty.value.elements[i], true)){
+                validIntegers.push(configProperty.value.elements[i].raw)
+            }
+        }
+        if (validIntegers.length === configProperty.value.elements.length) {
+            console.log(`${configProperty.key.name} is indeed a valid integer array`.green);
+            return true;
+        } else {
+            console.log(`${configProperty.key.name} is not a valid integer array`.red);
+            return false;
+        }
+    } else {
+        console.log(`${configProperty.key.name} is not an array`.red);
+        return false;
+    }
+}
+
+function isBoolean(configProperty) {
+    if (configProperty.value.raw == "true"){
+        console.log(`${configProperty.key.name} is indeed a boolean`.green);
+        return true;
+    } else {
+        console.log(`${configProperty.key.name} is not a boolean`.red);
+        return false;
     }
 }
 
