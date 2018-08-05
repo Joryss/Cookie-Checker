@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+
+<h1>CookieTouch Checker</h1>
+<p id="tester">My first paragraph.</p>
+<div style="width:80%; height: 200px;display:flex;">
+
+<textarea style="flex:1" id="my-script" name="message">
+The cat was playing in the garden.
+</textarea>
+</div>
+</body>
+<footer>
+    <script src="https://unpkg.com/esprima@~4.0/dist/esprima.js"></script>
+    <script>
+        let textareaID = document.getElementById('my-script');
+        let yourText = document.getElementById('tester');
+        textareaID.addEventListener('input', function() {
+            if (textareaID.value.length) {
+                require(['esprima'], function (parser) {
+                    // Do something with parser, e.g.
+                    var syntax = parser.parse(textareaID.value);
+                    console.log(JSON.stringify(syntax, null, 4));
+                });
+                yourText.innerHTML = "plop: "+ textareaID.value.length
+            }
+        });
+        function decompose(myscript){
+
+        }
+    </script>
+</footer>
+</html>
