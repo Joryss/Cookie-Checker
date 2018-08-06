@@ -2,6 +2,9 @@ const colors = require('colors');
 
 module.exports = {
     verifyConfigProperty: function(configProperty) {
+        const autoRegenObjects = 4;
+        const bankGetPutObjects = 2;
+
         console.log(`${JSON.stringify(configProperty)}`.cyan);
         switch (configProperty.key.name){
             case "MAX_PODS":
@@ -35,7 +38,25 @@ module.exports = {
                 //do something
                 break;
             case "BANK_GET_ITEMS":
-                //do something
+                if (isArrayOfObjects(configProperty)){
+                    const validElements = [];
+                    const currentElem = configProperty.value.properties;
+                    for (var i = 0; i < currentElem.length; i++) {
+                        if (currentElem[i].key.name == "item" && isInteger(currentElem[i])) {
+                                validElements.push(currentElem[i]);
+                        } else if (currentElem[i].key.name == "quantity" && isInteger(currentElem[i])) {
+                                validElements.push(currentElem[i]);
+                        } else {
+                            console.log(`${currentElem[i].key.name} is not a valid BANK_GET_ITEMS Element`.red);
+                            validElements.push(currentElem[i]);
+                        }
+                    }
+                    if (validElements.length === bankGetPutObjects) {
+                        console.log(`${configProperty.key.name} is indeed a valid BANK_GET_ITEMS Object`.green);
+                    } else {
+                        console.log(`${configProperty.key.name} is not a valid BANK_GET_ITEMS Object`.red);
+                    }
+                }
                 break;
             case "BANK_PUT_KAMAS":
                 isInteger(configProperty);
@@ -44,12 +65,29 @@ module.exports = {
                 isInteger(configProperty);
                 break;
             case "AUTO_REGEN":
-                if (configProperty.value.type == "ObjectExpression") {
-                    for (var i = 0; i < configProperty.value.properties.length; i++) {
-                        console.log(configProperty.value.properties[i].key.name);
+                if (isValidObject(configProperty)){
+                    const validElements = [];
+                    const currentElem = configProperty.value.properties;
+                    for (var i = 0; i < currentElem.length; i++) {
+                        if (currentElem[i].key.name == "minLife" && isInteger(currentElem[i])) {
+                                validElements.push(currentElem[i]);
+                        } else if (currentElem[i].key.name == "maxLife" && isInteger(currentElem[i])) {
+                                validElements.push(currentElem[i]);
+                        } else if (currentElem[i].key.name == "items" && isArrayOfInteger(currentElem[i])) {
+                                validElements.push(currentElem[i]);
+                        } else if (currentElem[i].key.name == "store" && isInteger(currentElem[i])) {
+                                validElements.push(currentElem[i]);
+                        } else {
+                            console.log(`${currentElem[i].key.name} is not a valid AUTO_REGEN Element`.red);
+                            validElements.push(currentElem[i]);
+                        }
+                    }
+                    if (validElements.length === autoRegenObjects) {
+                        console.log(`${configProperty.key.name} is indeed a valid AUTO_REGEN Object`.green);
+                    } else {
+                        console.log(`${configProperty.key.name} is not a valid AUTO_REGEN Object`.red);
                     }
                 }
-                //console.log(JSON.stringify(configProperty));
                 break;
             case "AUTO_DELETE":
                 isArrayOfInteger(configProperty);
@@ -89,7 +127,7 @@ function isInteger(configProperty, fromArray = false) {
         }
     }
 }
-function isArrayOfInteger(configProperty) {
+function isArrayOfInteger(configProperty, fromObject = false) {
     if (configProperty.value.type == "ArrayExpression") {
         const validIntegers = [];
         for (let i = 0; i < configProperty.value.elements.length; i++) {
@@ -106,6 +144,40 @@ function isArrayOfInteger(configProperty) {
         }
     } else {
         console.log(`${configProperty.key.name} is not an array`.red);
+        return false;
+    }
+}
+
+function isArrayOfObjects(configProperty, fromObject = false) {
+    if (configProperty.value.type == "ArrayExpression") {
+        const validIntegers = [];
+        console.log(configProperty.value)
+        for (let i = 0; i < configProperty.value.elements.length; i++) {
+            /*if (isValidObject(configProperty.value.elements[i], true)){
+                validIntegers.push(configProperty.value.elements[i].raw)
+            }*/
+        }
+        if (validIntegers.length === configProperty.value.elements.length) {
+            console.log(`${configProperty.key.name} is indeed a valid object array`.green);
+            return true;
+        } else {
+            console.log(`${configProperty.key.name} is not a valid object array`.red);
+            return false;
+        }
+    } else {
+        console.log(`${configProperty.key.name} is not an array`.red);
+        return false;
+    }
+}
+
+function isValidObject(configProperty, fromArray = false) {
+    const currentElem = (fromArray) ? configProperty.value : configProperty;
+    //console.log(configProperty)
+    if (currentElem.type == "ObjectExpression") {
+        console.log(`${configProperty.key.name} is indeed an Object`.green);
+        return true;
+    } else {
+        console.log(`${configProperty.key.name} is not an Object`.red);
         return false;
     }
 }

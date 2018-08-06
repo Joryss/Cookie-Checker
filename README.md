@@ -7,6 +7,7 @@ A script syntax checker for the scripts of [Cookie Touch](https://github.com/coo
  - [X] Handle Main global parsing
  - [X] Handle Error and Warning Generation
  - [X] Handle `config` syntax
+ - [ ] Handle if config is all Uppercase
  - [ ] Handle `move, bank, phenix` syntax
  - [ ] Handle front end view
  - [ ] Handle custom functions syntax

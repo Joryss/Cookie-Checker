@@ -7,12 +7,31 @@ const config = {
 	    minLife: 60, // Regeneration if below 60%
 	    maxLife: 90, // Regeneration up to 90%
 	    items: [ 1737, 528 ], // Items to use for prioritization regeneration
-	    store: 200 // Have 200 items total on either after the move to the bank
+	    store: 200, // Have 200 items total on either after the move to the bank
+		random: "badvalue"
+  	},
+	BANK_GET_ITEMS: [
+    	{ item: 6964, quantity: 5 }, // Get 5 Brakmarian intercity-express potion from bank.
+		{ item: 696, quantity: 23 }
+  	],
+}
+// Valid Script Config
+/*const config = {
+	MAX_PODS : 90,
+	OPEN_BAGS : true,
+	FORBIDDEN_MONSTERS: [ 148, 134 ],
+	maxlevel: 50,
+	AUTO_REGEN: {
+	    minLife: 60, // Regeneration if below 60%
+	    maxLife: 90, // Regeneration up to 90%
+	    items: [ 1737, 528 ], // Items to use for prioritization regeneration
+	    store: 200, // Have 200 items total on either after the move to the bank
   	},
 	BANK_GET_ITEMS: [
     	{ item: 6964, quantity: 5 } // Get 5 Brakmarian intercity-express potion from bank.
   	],
-}
+}*/
+
 /*
 const move = [
 	{ map : 88081177, path : "bottom" },
