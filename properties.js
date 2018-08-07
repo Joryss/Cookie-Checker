@@ -196,7 +196,7 @@ function isValidObject(configProperty) {
 }
 
 function isBoolean(configProperty) {
-    if (configProperty.value.raw == "true"){
+    if (configProperty.value.raw == "true" || configProperty.value.raw == "false"){
         console.log(`${configProperty.key.name} is indeed a boolean`.green);
         return true;
     } else {
