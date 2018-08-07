@@ -16,7 +16,7 @@ A script syntax checker for the scripts of [Cookie Touch](https://github.com/coo
 
 # Current View
 
-![Image of Cookie Checker](https://raw.githubusercontent.com/crimson-med/Cookie-Checker/master/images/current%201.png)
+![Image of Cookie Checker](https://raw.githubusercontent.com/crimson-med/Cookie-Checker/master/images/current%202.png)
 
 # Credits
 
