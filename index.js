@@ -68,6 +68,9 @@ function verifyConfig(configProperties){
             value: configProperties[i].value
         }
         properties.verifyConfigProperty(property);
+        if(notUppercase(configProperties[i].key.name)){
+            //log error + error not CAP
+        }
     }
 }
 

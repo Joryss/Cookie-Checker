@@ -5,7 +5,7 @@ module.exports = {
         const autoRegenObjects = 4;
         const bankGetPutObjects = 2;
 
-        console.log(`${JSON.stringify(configProperty)}`.cyan);
+        //console.log(`${JSON.stringify(configProperty)}`.cyan);
         switch (configProperty.key.name){
             case "MAX_PODS":
                 isInteger(configProperty);
@@ -35,28 +35,10 @@ module.exports = {
                 isArrayOfInteger(configProperty);
                 break;
             case "BANK_PUT_ITEMS":
-                //do something
+                isBankItems(configProperty, bankGetPutObjects);
                 break;
             case "BANK_GET_ITEMS":
-                if (isArrayOfObjects(configProperty)){
-                    const validElements = [];
-                    const currentElem = configProperty.value.properties;
-                    for (var i = 0; i < currentElem.length; i++) {
-                        if (currentElem[i].key.name == "item" && isInteger(currentElem[i])) {
-                                validElements.push(currentElem[i]);
-                        } else if (currentElem[i].key.name == "quantity" && isInteger(currentElem[i])) {
-                                validElements.push(currentElem[i]);
-                        } else {
-                            console.log(`${currentElem[i].key.name} is not a valid BANK_GET_ITEMS Element`.red);
-                            validElements.push(currentElem[i]);
-                        }
-                    }
-                    if (validElements.length === bankGetPutObjects) {
-                        console.log(`${configProperty.key.name} is indeed a valid BANK_GET_ITEMS Object`.green);
-                    } else {
-                        console.log(`${configProperty.key.name} is not a valid BANK_GET_ITEMS Object`.red);
-                    }
-                }
+                isBankItems(configProperty, bankGetPutObjects);
                 break;
             case "BANK_PUT_KAMAS":
                 isInteger(configProperty);
@@ -108,6 +90,37 @@ module.exports = {
     }
 }
 
+function isBankItems(configProperty, bankGetPutObjects) {
+    if (isArrayOfObjects(configProperty)){
+        const validElements = [];
+        const currentElem = configProperty.value.elements;
+        for (let i = 0; i < currentElem.length; i++) {
+            const validItemElems = []
+            for (let j = 0; j < currentElem[i].properties.length; j++) {
+                if (currentElem[i].properties[j].key.name == "item" && isInteger(currentElem[i].properties[j])) {
+                        validItemElems.push(currentElem[i].properties[j]);
+                } else if (currentElem[i].properties[j].key.name == "quantity" && isInteger(currentElem[i].properties[j])) {
+                        validItemElems.push(currentElem[i].properties[j]);
+                } else {
+                    console.log(`${currentElem[i].properties[j].key.name} is not a valid BANK_GET_ITEMS Element`.red);
+                }
+            } // end sub element for
+            if (currentElem[i].properties.length == validItemElems.length) {
+                validElements.push(currentElem[i].type);
+                console.log(`${JSON.stringify(currentElem[i].type)} is a valid BANK_GET_ITEMS Object`.green);
+            } else {
+                console.log(`${JSON.stringify(currentElem[i].type)} is not a valid BANK_GET_ITEMS Object`.red);
+            }
+        }
+        if (validElements.length === bankGetPutObjects) {
+            console.log(`${configProperty.key.name} is indeed a valid BANK_GET_ITEMS Object`.green);
+        } else {
+            return false;
+            console.log(`${configProperty.key.name} is not a valid BANK_GET_ITEMS Object`.red);
+        }
+    }
+}
+
 function isInteger(configProperty, fromArray = false) {
     if (fromArray){
         if (isNumeric(configProperty.raw)){
@@ -127,6 +140,7 @@ function isInteger(configProperty, fromArray = false) {
         }
     }
 }
+
 function isArrayOfInteger(configProperty, fromObject = false) {
     if (configProperty.value.type == "ArrayExpression") {
         const validIntegers = [];
@@ -150,14 +164,13 @@ function isArrayOfInteger(configProperty, fromObject = false) {
 
 function isArrayOfObjects(configProperty, fromObject = false) {
     if (configProperty.value.type == "ArrayExpression") {
-        const validIntegers = [];
-        console.log(configProperty.value)
+        const validObjects = [];
         for (let i = 0; i < configProperty.value.elements.length; i++) {
-            /*if (isValidObject(configProperty.value.elements[i], true)){
-                validIntegers.push(configProperty.value.elements[i].raw)
-            }*/
+            if (configProperty.value.elements[i].type == "ObjectExpression") {
+                validObjects.push(configProperty.value.elements[i].raw)
+            }
         }
-        if (validIntegers.length === configProperty.value.elements.length) {
+        if (validObjects.length === configProperty.value.elements.length) {
             console.log(`${configProperty.key.name} is indeed a valid object array`.green);
             return true;
         } else {
@@ -170,10 +183,10 @@ function isArrayOfObjects(configProperty, fromObject = false) {
     }
 }
 
-function isValidObject(configProperty, fromArray = false) {
-    const currentElem = (fromArray) ? configProperty.value : configProperty;
+function isValidObject(configProperty) {
+    //const currentElem = (fromArray) ?  : configProperty;
     //console.log(configProperty)
-    if (currentElem.type == "ObjectExpression") {
+    if (configProperty.value.type == "ObjectExpression") {
         console.log(`${configProperty.key.name} is indeed an Object`.green);
         return true;
     } else {
