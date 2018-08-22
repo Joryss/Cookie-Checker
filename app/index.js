@@ -1,12 +1,17 @@
 const esprima = require('esprima')
 const properties = require('./properties.js');
+const tools = require('./tools.js');
 var fs = require('fs');
 
-var contents = fs.readFileSync('script.js', 'utf8');
+var contents = fs.readFileSync('./app/scripts/scriptnew.js', 'utf8');
 
 const warnings = [];
 const errors = [];
 
+const safeScript = tools.deconstructFunctions(contents);
+//const final = tools.reconstructFunctions(safeScript.functionMap, safeScript.output);
+//fs.writeFileSync('./app/scripts/tester.js', final)
+//return;
 function analyzeCode(code) {
 
 
@@ -109,7 +114,7 @@ function traverse(node, func) {
 }
 
 
-analyzeCode(contents);
+analyzeCode(safeScript.output);
 
 //console.log(test.body[0].declarations[0].init)
 //console.log(test.body[0].declarations[0].init);

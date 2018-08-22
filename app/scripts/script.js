@@ -2,7 +2,7 @@
 const config = {
 	MAX_PODS : 90,
 	OPEN_BAGS : true,
-	FORBIDDEN_MONSTERS: [ 148, 134 ],
+	FORBIDDEN_MONSTERS: [ ],
 	AUTO_REGEN: {
 	    minLife: 60, // Regeneration if below 60%
 	    maxLife: 90, // Regeneration up to 90%
