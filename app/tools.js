@@ -24,5 +24,7 @@ module.exports = {
         return result;
     },
 
-    indexFunctions
+    indexFunctions: function (content){
+        return true;
+    }
 }
