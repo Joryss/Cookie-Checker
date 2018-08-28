@@ -1,5 +1,5 @@
 module.exports = {
-    deconstructFunctions: function(content) {
+    deconstructFunctions: (content) => {
         // Split all lines
         let splitted = content.split(/\r\n|\n|\r/);
         // Mapping the changes
@@ -15,7 +15,7 @@ module.exports = {
         return {functionMap: functions, output: result};
     },
 
-    reconstructFunctions: function (functionMap, content) {
+    reconstructFunctions: (functionMap, content) => {
         let splitted = content.split(/\r\n|\n|\r/);
         for (let i = 0; i < functionMap.length; i++) {
             splitted[functionMap[i]] = splitted[functionMap[i]].replace("function", "function*");
@@ -25,6 +25,7 @@ module.exports = {
     },
 
     indexFunctions: function (content){
+        // TO DO
         return true;
     }
 }
